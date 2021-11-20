@@ -1,12 +1,18 @@
 package atomic;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Test01 {
 
     public static void main(String[] args) throws InterruptedException {
-        Bank bank = new Bank();
+      //  executeBasicCounter(new BasicCounter());
+
+      //  executeBasicCounter(new SynchronizedCounter());
+
+        executeBasicCounter(new SafeCounterWithoutLock());
+    }
+
+    public static void executeBasicCounter(Counter counter) throws InterruptedException {
         int threadCount = 2;
 
         CountDownLatch latch = new CountDownLatch(threadCount);
@@ -14,7 +20,7 @@ public class Test01 {
 
             new Thread(() -> {
                 for (int j = 1; j <= 100; j++) {
-                    System.out.println(Thread.currentThread().getName() + " " + bank.increment() +"원");
+                    counter.increment();
 
                     try {
                         Thread.sleep(100);
@@ -28,6 +34,6 @@ public class Test01 {
         }
 
         latch.await();
-        System.out.println("total = " + bank.getBalance());
+        System.out.println("total = " + counter.getBalance());
     }
 }

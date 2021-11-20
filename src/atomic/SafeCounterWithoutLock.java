@@ -2,19 +2,20 @@ package atomic;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SafeCounterWithoutLock {
+public class SafeCounterWithoutLock  implements Counter {
     private final AtomicInteger counter = new AtomicInteger(0);
 
-    public int getValue() {
+    public int getBalance() {
         return counter.get();
     }
 
     public void increment() {
         while (true) {
-            int existingValue = getValue();
-            int newValue = existingValue + 1;
+            int existingValue = getBalance();
+            int newValue = existingValue + 1000;
             if (counter.compareAndSet(existingValue, newValue)) {
                 return;
+            } else {
             }
         }
     }
